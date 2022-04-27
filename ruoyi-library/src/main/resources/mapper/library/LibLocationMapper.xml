@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.library.mapper.LibLocationMapper">
+
+    <resultMap type="LibLocation" id="LibLocationResult">
+        <result property="locaId"    column="loca_id"    />
+        <result property="locaName"    column="loca_name"    />
+        <result property="locaImg"    column="loca_img"    />
+        <result property="locaIntroduction"    column="loca_Introduction"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectLibLocationVo">
+        select loca_id, loca_name, loca_img, loca_Introduction, create_by, create_time, update_by, update_time, remark from lib_location
+    </sql>
+
+    <select id="selectLibLocationList" parameterType="LibLocation" resultMap="LibLocationResult">
+        <include refid="selectLibLocationVo"/>
+        <where>
+            <if test="locaName != null  and locaName != ''"> and loca_name like concat('%', #{locaName}, '%')</if>
+            <if test="locaImg != null  and locaImg != ''"> and loca_img = #{locaImg}</if>
+            <if test="locaIntroduction != null  and locaIntroduction != ''"> and loca_Introduction = #{locaIntroduction}</if>
+        </where>
+    </select>
+
+    <select id="checkLocaNameUnique" parameterType="String"  resultMap="LibLocationResult">
+        <include refid="selectLibLocationVo"/>
+        <where>
+            <if test="locaName != null  and locaName != ''"> and loca_name = #{locaName}</if>
+            <if test="locaId != null  and locaId != ''"> and loca_id != #{locaId}</if>
+        </where>
+    </select>
+
+    <select id="selectLibLocationByLocaId" parameterType="Long" resultMap="LibLocationResult">
+        <include refid="selectLibLocationVo"/>
+        where loca_name = #{locaName} limit 1
+    </select>
+
+    <insert id="insertLibLocation" parameterType="LibLocation" useGeneratedKeys="true" keyProperty="locaId">
+        insert into lib_location
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="locaName != null and locaName != ''">loca_name,</if>
+            <if test="locaImg != null">loca_img,</if>
+            <if test="locaIntroduction != null">loca_Introduction,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="locaName != null and locaName != ''">#{locaName},</if>
+            <if test="locaImg != null">#{locaImg},</if>
+            <if test="locaIntroduction != null">#{locaIntroduction},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLibLocation" parameterType="LibLocation">
+        update lib_location
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="locaName != null and locaName != ''">loca_name = #{locaName},</if>
+            <if test="locaImg != null">loca_img = #{locaImg},</if>
+            <if test="locaIntroduction != null">loca_Introduction = #{locaIntroduction},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where loca_id = #{locaId}
+    </update>
+
+    <delete id="deleteLibLocationByLocaId" parameterType="Long">
+        delete from lib_location where loca_id = #{locaId}
+    </delete>
+
+    <delete id="deleteLibLocationByLocaIds" parameterType="String">
+        delete from lib_location where loca_id in
+        <foreach item="locaId" collection="array" open="(" separator="," close=")">
+            #{locaId}
+        </foreach>
+    </delete>
+</mapper>

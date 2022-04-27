@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.library.mapper.LibBorrowMapper">
+
+    <resultMap type="LibBorrow" id="LibBorrowResult">
+        <result property="borrowId"    column="borrow_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="bookFlag"    column="book_flag"    />
+        <result property="borrowTime"    column="borrow_time"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="isRenew"    column="is_renew"    />
+        <result property="isLeft"    column="is_left"    />
+        <result property="isLoss"    column="is_loss"    />
+        <result property="isDelete"    column="is_delete"    />
+        <association property="user" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
+        <association property="book" column="book_id" javaType="Book" resultMap="BookResult"/>
+    </resultMap>
+
+    <resultMap type="SysUser" id="SysUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="email"    column="email" />
+    </resultMap>
+
+    <resultMap type="Book" id="BookResult">
+        <result property="bookId"    column="book_id"    />
+        <result property="bookName"    column="book_name"    />
+        <result property="bookAuthor"    column="book_author"    />
+        <result property="bookIsbn"    column="book_isbn"    />
+    </resultMap>
+
+    <sql id="selectLibBorrowVo">
+        select bw.borrow_id, bw.user_id, bw.book_id, bw.book_flag, bw.borrow_time,
+               bw.expire_time, bw.return_time, bw.is_renew, bw.is_left, bw.is_loss, bw.is_delete,
+               bk.book_name,bk.book_isbn,
+               us.user_name,us.nick_name,us.email
+        from lib_borrow bw
+                 LEFT JOIN lib_book bk ON bw.book_id=bk.book_id
+                 LEFT JOIN sys_user us ON bw.user_id=us.user_id
+    </sql>
+
+    <select id="selectLibBorrowList" parameterType="LibBorrow" resultMap="LibBorrowResult">
+        <include refid="selectLibBorrowVo"/>
+        where bw.is_delete='0' and bw.is_left='0' and bw.is_loss='0'
+            <if test="userId != null "> and bw.user_id like concat('%', #{userId}, '%')</if>
+            <if test="bookId != null "> and bw.book_id = #{bookId}</if>
+            <if test="bookFlag != null  and bookFlag != ''"> and bw.book_flag = #{bookFlag}</if>
+            <if test="isRenew != null  and isRenew != ''"> and bw.is_renew = #{isRenew}</if>
+            <if test="isLeft != null  and isLeft != ''"> and bw.is_left = #{isLeft}</if>
+            <if test="isLoss != null  and isLoss != ''"> and bw.is_loss = #{isLoss}</if>
+             ${params.dataScope}
+    </select>
+
+    <select id="selectLibBorrowAll" parameterType="LibBorrow" resultMap="LibBorrowResult">
+        <include refid="selectLibBorrowVo"/>
+        where bw.is_delete='0' and bw.is_left='0'
+        <if test="userId != null "> and bw.user_id like concat('%', #{userId}, '%')</if>
+        <if test="bookId != null "> and bw.book_id = #{bookId}</if>
+        <if test="bookFlag != null  and bookFlag != ''"> and bw.book_flag = #{bookFlag}</if>
+        <if test="isRenew != null  and isRenew != ''"> and bw.is_renew = #{isRenew}</if>
+        <if test="isLeft != null  and isLeft != ''"> and bw.is_left = #{isLeft}</if>
+        <if test="isLoss != null  and isLoss != ''"> and bw.is_loss = #{isLoss}</if>
+        ${params.dataScope}
+    </select>
+
+    <select id="selectLibBorrowByBorrowId" parameterType="Long" resultMap="LibBorrowResult">
+        <include refid="selectLibBorrowVo"/>
+        where borrow_id = #{borrowId}
+    </select>
+
+    <insert id="insertLibBorrow" parameterType="LibBorrow" useGeneratedKeys="true" keyProperty="borrowId">
+        insert into lib_borrow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="bookId != null">book_id,</if>
+            <if test="bookFlag != null">book_flag,</if>
+            <if test="borrowTime != null">borrow_time,</if>
+            <if test="expireTime != null">expire_time,</if>
+            <if test="returnTime != null">return_time,</if>
+            <if test="isRenew != null">is_renew,</if>
+            <if test="isLeft != null">is_left,</if>
+            <if test="isLoss != null">is_loss,</if>
+            <if test="isDelete != null">is_delete,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="bookId != null">#{bookId},</if>
+            <if test="bookFlag != null">#{bookFlag},</if>
+            <if test="borrowTime != null">#{borrowTime},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            <if test="returnTime != null">#{returnTime},</if>
+            <if test="isRenew != null">#{isRenew},</if>
+            <if test="isLeft != null">#{isLeft},</if>
+            <if test="isLoss != null">#{isLoss},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLibBorrow" parameterType="LibBorrow">
+        update lib_borrow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="bookId != null">book_id = #{bookId},</if>
+            <if test="bookFlag != null">book_flag = #{bookFlag},</if>
+            <if test="borrowTime != null">borrow_time = #{borrowTime},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="returnTime != null">return_time = #{returnTime},</if>
+            <if test="isRenew != null">is_renew = #{isRenew},</if>
+            <if test="isLeft != null">is_left = #{isLeft},</if>
+            <if test="isLoss != null">is_loss = #{isLoss},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+        </trim>
+        where borrow_id = #{borrowId}
+    </update>
+
+    <delete id="deleteLibBorrowByBorrowId" parameterType="Long">
+        update lib_borrow set is_delete = '1' where borrow_id = #{borrowId}
+    </delete>
+
+    <delete id="deleteLibBorrowByBorrowIds" parameterType="String">
+        update lib_book set is_delete = '1' where book_id in
+        <foreach item="borrowId" collection="array" open="(" separator="," close=")">
+            #{borrowId}
+        </foreach>
+    </delete>
+</mapper>

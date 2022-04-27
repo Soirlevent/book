@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.library.mapper.LibTypeMapper">
+
+    <resultMap type="LibType" id="LibTypeResult">
+        <result property="typeId"    column="type_id"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="typeImg"    column="type_img"    />
+        <result property="typeIntroduction"    column="type_introduction"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectLibTypeVo">
+        select type_id, type_name, type_img, type_introduction, create_by, create_time, update_by, update_time, remark from lib_type
+    </sql>
+
+    <select id="selectLibTypeList" parameterType="LibType" resultMap="LibTypeResult">
+        <include refid="selectLibTypeVo"/>
+        <where>
+            <if test="typeName != null  and typeName != ''"> and type_name like concat('%', #{typeName}, '%')</if>
+            <if test="typeImg != null  and typeImg != ''"> and type_img = #{typeImg}</if>
+            <if test="typeIntroduction != null  and typeIntroduction != ''"> and type_introduction = #{typeIntroduction}</if>
+        </where>
+    </select>
+    <select id="checkTypeNameUnique" parameterType="String" resultMap="LibTypeResult">
+        <include refid="selectLibTypeVo"/>
+    where type_name = #{typeName} limit 1
+    </select>
+
+    <select id="selectLibTypeByTypeId" parameterType="Long" resultMap="LibTypeResult">
+        <include refid="selectLibTypeVo"/>
+        where type_id = #{typeId}
+    </select>
+
+    <insert id="insertLibType" parameterType="LibType" useGeneratedKeys="true" keyProperty="typeId">
+        insert into lib_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeName != null">type_name,</if>
+            <if test="typeImg != null">type_img,</if>
+            <if test="typeIntroduction != null">type_introduction,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeName != null">#{typeName},</if>
+            <if test="typeImg != null">#{typeImg},</if>
+            <if test="typeIntroduction != null">#{typeIntroduction},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLibType" parameterType="LibType">
+        update lib_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeName != null">type_name = #{typeName},</if>
+            <if test="typeImg != null">type_img = #{typeImg},</if>
+            <if test="typeIntroduction != null">type_introduction = #{typeIntroduction},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where type_id = #{typeId}
+    </update>
+
+    <delete id="deleteLibTypeByTypeId" parameterType="Long">
+        delete from lib_type where type_id = #{typeId}
+    </delete>
+
+    <delete id="deleteLibTypeByTypeIds" parameterType="String">
+        delete from lib_type where type_id in
+        <foreach item="typeId" collection="array" open="(" separator="," close=")">
+            #{typeId}
+        </foreach>
+    </delete>
+</mapper>

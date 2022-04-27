@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.library.mapper.LibOverMapper">
+
+    <resultMap type="LibOver" id="LibOverResult">
+        <result property="overId"    column="over_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookPrice"    column="book_price"    />
+        <result property="overData"    column="over_data"    />
+        <result property="overOneday"    column="over_oneday"    />
+        <result property="overMoney"    column="over_money"    />
+        <result property="status"    column="status"    />
+        <result property="isDelet"    column="is_delet"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="user" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
+        <association property="book" column="book_id" javaType="Book" resultMap="BookResult"/>
+    </resultMap>
+
+    <resultMap type="SysUser" id="SysUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+    </resultMap>
+
+    <resultMap type="Book" id="BookResult">
+        <result property="bookId"    column="book_id"    />
+        <result property="bookName"    column="book_name"    />
+        <result property="bookAuthor"    column="book_author"    />
+        <result property="bookIsbn"    column="book_isbn"    />
+    </resultMap>
+
+    <sql id="selectLibOverVo">
+        select ov.over_id, ov.book_id,ov.book_price, ov.user_id, ov.over_data, ov.over_oneday,
+               ov.over_money, ov.status, ov.is_delet, ov.create_time, ov.update_time,
+               bk.book_name,bk.book_isbn,
+               us.user_name,us.nick_name,us.email
+        from lib_over ov
+                 LEFT JOIN lib_book bk ON ov.book_id=bk.book_id
+                 LEFT JOIN sys_user us ON ov.user_id=us.user_id
+    </sql>
+
+    <select id="selectLibOverList" parameterType="LibOver" resultMap="LibOverResult">
+        <include refid="selectLibOverVo"/>
+        where ov.is_delet='0' and ov.status !='1'
+            <if test="bookId != null "> and book_id = #{bookId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="overData != null "> and over_data = #{overData}</if>
+            <if test="overOneday != null "> and over_oneday = #{overOneday}</if>
+            <if test="overMoney != null "> and over_money = #{overMoney}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        ${params.dataScope}
+    </select>
+
+    <select id="selectLibOverByOverId" parameterType="Long" resultMap="LibOverResult">
+        <include refid="selectLibOverVo"/>
+        where over_id = #{overId}
+    </select>
+
+    <insert id="insertLibOver" parameterType="LibOver" useGeneratedKeys="true" keyProperty="overId">
+        insert into lib_over
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">book_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="bookPrice != null">book_price,</if>
+            <if test="overData != null">over_data,</if>
+            <if test="overOneday != null">over_oneday,</if>
+            <if test="overMoney != null">over_money,</if>
+            <if test="status != null">status,</if>
+            <if test="isDelet != null">is_delet,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">#{bookId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="bookPrice != null">#{bookPrice},</if>
+            <if test="overData != null">#{overData},</if>
+            <if test="overOneday != null">#{overOneday},</if>
+            <if test="overMoney != null">#{overMoney},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isDelet != null">#{isDelet},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLibOver" parameterType="LibOver">
+        update lib_over
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bookId != null">book_id = #{bookId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="bookPrice != null">book_price = #{bookPrice},</if>
+            <if test="overData != null">over_data = #{overData},</if>
+            <if test="overOneday != null">over_oneday = #{overOneday},</if>
+            <if test="overMoney != null">over_money = #{overMoney},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isDelet != null">is_delet = #{isDelet},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where over_id = #{overId}
+    </update>
+
+    <delete id="deleteLibOverByOverId" parameterType="Long">
+        delete from lib_over where over_id = #{overId}
+    </delete>
+
+    <delete id="deleteLibOverByOverIds" parameterType="String">
+        delete from lib_over where over_id in
+        <foreach item="overId" collection="array" open="(" separator="," close=")">
+            #{overId}
+        </foreach>
+    </delete>
+</mapper>
