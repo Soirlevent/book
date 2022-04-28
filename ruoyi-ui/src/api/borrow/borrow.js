@@ -36,12 +36,12 @@ export function updateBorrow(data) {
 }
 
 // 删除借阅信息
-export function delBorrow(borrowId) {
-  return request({
-    url: '/borrow/borrow/' + borrowId,
-    method: 'delete'
-  })
-}
+// export function delBorrow(borrowId) {
+//   return request({
+//     url: '/borrow/borrow/' + borrowId,
+//     method: 'delete'
+//   })
+// }
 
 export function addBorrowByBookId(bookId){
   return request({

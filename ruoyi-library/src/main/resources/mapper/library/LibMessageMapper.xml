@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.library.mapper.LibMessageMapper">
+
+    <resultMap type="LibMessage" id="LibMessageResult">
+        <result property="messageId"    column="message_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="messageTitle"    column="message_title"    />
+        <result property="messageContent"    column="message_content"    />
+        <result property="isRead"    column="is_read"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="createTime"    column="create_time"    />
+        <association property="user" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
+        <association property="book" column="book_id" javaType="Book" resultMap="BookResult"/>
+    </resultMap>
+
+    <resultMap type="SysUser" id="SysUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="email" column="email" />
+    </resultMap>
+
+    <resultMap type="Book" id="BookResult">
+        <result property="bookId"    column="book_id"    />
+        <result property="bookName"    column="book_name"    />
+        <result property="bookIsbn"    column="book_isbn"    />
+    </resultMap>
+
+    <sql id="selectLibMessageVo">
+        select mg.message_id, mg.user_id, mg.book_id, mg.message_title, mg.message_content, mg.is_read, mg.is_delete, mg.create_time,
+               us.user_name,us.nick_name,us.email,
+               bk.book_name,bk.book_isbn
+        from lib_message mg
+                 LEFT JOIN lib_book bk ON mg.book_id=bk.book_id
+                 LEFT JOIN sys_user us ON mg.user_id=us.user_id
+    </sql>
+
+    <select id="selectLibMessageList" parameterType="LibMessage" resultMap="LibMessageResult">
+        <include refid="selectLibMessageVo"/>
+        where mg.is_delete='0'
+            <if test="userId != null "> and mg.user_id = #{userId}</if>
+            <if test="bookId != null "> and mg.book_id = #{bookId}</if>
+            <if test="messageTitle != null  and messageTitle != ''"> and mg.message_title = #{messageTitle}</if>
+            <if test="isRead != null  and isRead != ''"> and mg.is_read = #{isRead}</if>
+        ${params.dataScope}
+        order by mg.is_read
+    </select>
+
+    <select id="selectLibMessageByMessageId" parameterType="Long" resultMap="LibMessageResult">
+        <include refid="selectLibMessageVo"/>
+        where message_id = #{messageId}
+    </select>
+
+    <insert id="insertLibMessage" parameterType="LibMessage" useGeneratedKeys="true" keyProperty="messageId">
+        insert into lib_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="bookId != null">book_id,</if>
+            <if test="messageTitle != null">message_title,</if>
+            <if test="messageContent != null">message_content,</if>
+            <if test="isRead != null">is_read,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="bookId != null">#{bookId},</if>
+            <if test="messageTitle != null">#{messageTitle},</if>
+            <if test="messageContent != null">#{messageContent},</if>
+            <if test="isRead != null">#{isRead},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLibMessage" parameterType="LibMessage">
+        update lib_message set is_read = '1'
+        where message_id = #{messageId}
+    </update>
+
+    <delete id="deleteLibMessageByMessageId" parameterType="Long">
+        update lib_message set is_delete = '1' where message_id = #{messageId}
+    </delete>
+
+    <delete id="deleteLibMessageByMessageIds" parameterType="String">
+        update lib_message set is_delete = '1' where message_id in
+        <foreach item="messageId" collection="array" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+    </delete>
+</mapper>

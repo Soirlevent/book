@@ -20,13 +20,13 @@
         "navigationBarTitleText": "资讯"
       }
     },
-    // {
-    //   "path": "pages/message/message",
-    //   "style":
-    //   {
-    //     "navigationBarTitleText": "消息"
-    //   }
-    // },
+    {
+      "path": "pages/message/message",
+      "style":
+      {
+        "navigationBarTitleText": "消息"
+      }
+    },
     {
       "path": "pages/details/details",
       "style":
@@ -84,20 +84,6 @@
           "bounce": "none"
         }
       }
-    },
-    {
-      "path": "pages/register/register",
-      "style":
-      {
-        "navigationBarTitleText": "注册"
-      }
-    },
-    {
-      "path": "pages/resetPwd/resetPwd",
-      "style":
-      {
-        "navigationBarTitleText": "找回密码"
-      }
     }
   ],
   "globalStyle":
@@ -114,24 +100,18 @@
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
-      // {
-      //   "pagePath": "pages/home/home",
-      //   "iconPath": "static/img/home.png",
-      //   "selectedIconPath": "static/img/home-active.png",
-      //   "text": "首页"
-      // },
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/img/zjm.png",
-        "selectedIconPath": "static/img/zjm-active.png",
+        "iconPath": "static/img/home.png",
+        "selectedIconPath": "static/img/home.png",
         "text": "首页"
       },
-      {
-        "pagePath": "pages/home/home",
-        "iconPath": "static/img/notice.png",
-        "selectedIconPath": "static/img/notice-active.png",
-        "text": "资讯"
-      },
+	  {
+		"pagePath":"pages/message/message",
+		  "iconPath":"static/img/message%20.png",
+		  "selectedIconPath":"static/img/message%20-active.png",
+		  "text":"消息"
+	  },
       {
         "pagePath": "pages/mine/mine",
         "iconPath": "static/img/mine.png",

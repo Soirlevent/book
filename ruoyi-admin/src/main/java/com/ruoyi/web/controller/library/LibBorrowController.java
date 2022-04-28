@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.library;
 
+import java.text.ParseException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +44,14 @@ public class LibBorrowController extends BaseController
     {
         startPage();
         List<LibBorrow> list = libBorrowService.selectLibBorrowList(libBorrow);
+        return getDataTable(list);
+    }
+
+    @PreAuthorize("@ss.hasPermi('borrow:history:list')")
+    @GetMapping("/listHistory")
+    public TableDataInfo listHistory(LibBorrow libBorrow) {
+        startPage();
+        List<LibBorrow> list = libBorrowService.selectLibBorrowlistHistory(libBorrow);
         return getDataTable(list);
     }
 
@@ -94,12 +103,12 @@ public class LibBorrowController extends BaseController
     /**
      * 删除借阅信息
      */
-    @PreAuthorize("@ss.hasPermi('borrow:borrow:remove')")
+    @PreAuthorize("@ss.hasPermi('borrow:history:remove')")
     @Log(title = "借阅信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{borrowIds}")
-    public AjaxResult remove(@PathVariable Long[] borrowIds)
+    public AjaxResult remove(@PathVariable Long borrowIds)
     {
-        return toAjax(libBorrowService.deleteLibBorrowByBorrowIds(borrowIds));
+        return toAjax(libBorrowService.deleteLibBorrowByBorrowId(borrowIds));
     }
 
     /**
@@ -119,8 +128,7 @@ public class LibBorrowController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('borrow:borrow:return') " )
     @GetMapping("/returnBorrowByBorrowId/{id}")
-    public AjaxResult returnBorrowByBorrowId(@PathVariable("id") Long id)
-    {
+    public AjaxResult returnBorrowByBorrowId(@PathVariable("id") Long id) throws ParseException {
         LibBorrow libBorrow = new LibBorrow();
         libBorrow.setBorrowId(id);
         return toAjax(libBorrowService.returnBook(libBorrow));
@@ -151,5 +159,14 @@ public class LibBorrowController extends BaseController
         LibBorrow libBorrow = new LibBorrow();
         libBorrow.setBorrowId(borrowId);
         return toAjax(libBorrowService.renewBook(libBorrow));
+    }
+
+    @PreAuthorize("@ss.hasPermi('borrow:borrow:findall')")
+    @GetMapping("/findAll")
+    public TableDataInfo findAll(LibBorrow libBorrow)
+    {
+        startPage();
+        List<LibBorrow> list = libBorrowService.selectLibBorrowAll(libBorrow);
+        return getDataTable(list);
     }
 }

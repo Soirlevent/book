@@ -61,4 +61,5 @@ public interface LibBorrowMapper
      */
     public int deleteLibBorrowByBorrowIds(Long[] borrowIds);
 
+    public List<LibBorrow> selectLibBorrowlistHistory(LibBorrow libBorrow);
 }

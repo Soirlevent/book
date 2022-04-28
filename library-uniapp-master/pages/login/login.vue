@@ -1,6 +1,28 @@
 <template>
   <view>
-    <view class="ui-all">
+	  <!-- <view class="content">
+	          <view class="avatorWrapper">
+	              <view class="avator">
+	                  <image class="img" src="../../static/login.png" mode="widthFix"></image>
+	              </view>
+	          </view>
+	          <view class="form">
+	              <view class="inputWrapper">
+	                  <input class="input" type="text" v-model="loginForm.username" value="" placeholder="请输入用户名"/>
+	              </view>
+	              <view class="inputWrapper">
+	                  <input class="input" type="password" v-model="loginForm.password" value="" placeholder="请输入密码"/>
+	              </view>
+				  <!-- <view class="inputWrapper">
+					  <input v-model="loginForm.code" type="number" placeholder="请输入验证码" />
+					  <image class="codeImg" :src="codeUrl" @click="getCode"></image>
+				  </view> -->
+	            <!--  <view class="loginBtn">
+	                  <text class="btnValue" @click="submit">登录</text>
+	              </view>
+	          </view>
+	      </view> --> 
+   <view class="ui-all">
       <view class="ui-list">
         <text>账号</text>
         <input v-model="loginForm.username" placeholder="请输入账号" />
@@ -15,7 +37,6 @@
         <input v-model="loginForm.code" type="number" placeholder="请输入验证码" maxlength="20" />
         <image class="codeImg" :src="codeUrl" @click="getCode"></image>
       </view>
-      <view class="register"><navigator url="/pages/register/register" hover-class="none">注册</navigator></view>
     </view>
     <button class="login mt5" @click="submit">登录</button>
   </view>
@@ -107,7 +128,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<!-- <style lang="scss">
 .eye {
   position: absolute;
   height: 50rpx;
@@ -144,3 +165,66 @@ export default {
   width: 200rpx;
 }
 </style>
+ -->
+ 
+ <style>
+     .content {
+         background: #377EB4;
+         width: 100vw;
+         height: 100vh;
+     }
+     .avatorWrapper{
+         height: 30vh;
+         width: 100vw;
+         display: flex;
+         justify-content: center;
+         align-items: flex-end;
+     }
+     .avator{
+         width: 200upx;
+         height: 200upx;
+         overflow: hidden;
+     }
+     .avator .img{
+         width: 100%
+     }
+     .form{
+         padding: 0 100upx;
+         margin-top: 80px;
+     }
+     .inputWrapper{
+         width: 100%;
+         height: 80upx;
+         background: white;
+         border-radius: 20px;
+         box-sizing: border-box;
+         padding: 0 20px;
+         margin-top: 25px;
+     }
+     .inputWrapper .input{
+         width: 100%;
+         height: 100%;
+         text-align: center;
+         font-size: 15px;
+     }
+     .loginBtn{
+         width: 100%;
+         height: 80upx;
+         background: #77B307;
+         border-radius: 50upx;
+         margin-top: 50px;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         
+     }
+     .loginBtn .btnValue{
+         color: white;
+     }
+     .forgotBtn{
+         text-align: center;
+         color: #EAF6F9;
+         font-size: 15px;
+         margin-top: 20px;
+     }
+ </style>

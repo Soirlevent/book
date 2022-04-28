@@ -38,6 +38,10 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-tools</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-library</artifactId>
+        </dependency>
 
     </dependencies>
 
