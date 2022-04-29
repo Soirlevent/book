@@ -1,4 +1,19 @@
-package com.ruoyi.tools.rest;
+/*
+ *  Copyright 2019-2020 Zheng Jie
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package com.ruoyi.web.controller.tools;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.tools.domain.AlipayConfig;
@@ -22,8 +37,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * @author
- * @date
+ * @author Zheng Jie
+ * @date 2018-12-31
  */
 @Slf4j
 @RestController
@@ -83,7 +98,7 @@ public class AliPayController {
             System.out.println("商户订单号" + outTradeNo + "  " + "第三方交易号" + tradeNo);
 
             // 根据业务需要返回数据，这里统一返回OK
-            return new ResponseEntity<>("payment successful", HttpStatus.OK);
+            return new ResponseEntity<>("支付成功", HttpStatus.OK);
         } else {
             // 根据业务需要返回数据
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -108,6 +123,10 @@ public class AliPayController {
             String totalAmount = new String(request.getParameter("total_amount").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
             //验证
             if (tradeStatus.equals(AliPayStatusEnum.SUCCESS.getValue()) || tradeStatus.equals(AliPayStatusEnum.FINISHED.getValue())) {
+                //支付成功
+                System.out.println("==============================支付成功==============================");
+                System.out.println("商户订单号" + outTradeNo + "  " + "第三方交易号" + tradeNo + "  " + "付款金额" + totalAmount);
+                System.out.println("==============================支付成功==============================");
                 // 验证通过后应该根据业务需要处理订单
             }
             return new ResponseEntity<>(HttpStatus.OK);

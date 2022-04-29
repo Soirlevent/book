@@ -28,6 +28,7 @@ public interface LibNoticeMapper
      */
     public List<LibNotice> selectLibNoticeList(LibNotice libNotice);
 
+    public List<LibNotice> selectLibNoticeAll(LibNotice libNotice);
     /**
      * 新增消息管理
      *
@@ -59,4 +60,5 @@ public interface LibNoticeMapper
      * @return 结果
      */
     public int deleteLibNoticeByNoticeIds(Long[] noticeIds);
+
 }

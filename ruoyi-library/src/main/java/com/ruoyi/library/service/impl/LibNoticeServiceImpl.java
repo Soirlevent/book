@@ -43,34 +43,30 @@ public class LibNoticeServiceImpl implements ILibNoticeService
      * @return 消息管理
      */
     @Override
-    public List<LibNotice> selectLibNoticeList(LibNotice libNotice) throws ParseException {
+    public List<LibNotice> selectLibNoticeAll(LibNotice libNotice)
+    {
         Date date=new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        List<LibNotice> list=libNoticeMapper.selectLibNoticeList(libNotice);
+        List<LibNotice> list=libNoticeMapper.selectLibNoticeAll(libNotice);
         for (int i = 0; i < list.size(); i++) {
             if (sdf.format(date).compareTo(sdf.format(list.get(i).getEndTime()))>0){
                 list.get(i).setStatus("2");
-                System.out.println("结束时间小于当前时间");
-                System.out.println(list.get(i).getEndTime());
-                System.out.println("结束时间："+list.get(i).getEndTime());
-                System.out.println("当前时间："+date);
-                long time1=sdf.parse(sdf.format(list.get(i).getEndTime())).getTime();
-                long time2=sdf.parse(sdf.format(date)).getTime();
-                int result=(int) ((time1 - time2) / (1000 * 3600 * 24));
-                System.out.println("相差"+result+"天");
-                System.out.println("==========================");
                 libNoticeMapper.updateLibNotice(list.get(i));
             }else if(sdf.format(date).compareTo(sdf.format(list.get(i).getStartTime()))<0){
                 list.get(i).setStatus("0");
-                System.out.println("开始时间小于当前时间");
                 libNoticeMapper.updateLibNotice(list.get(i));
             }
             else {
                 list.get(i).setStatus("1");
-                System.out.println("结束时间大于当前时间");
                 libNoticeMapper.updateLibNotice(list.get(i));
             }
         }
+        return libNoticeMapper.selectLibNoticeAll(libNotice);
+    }
+
+    @Override
+    public List<LibNotice> selectLibNoticeList(LibNotice libNotice)
+    {
         return libNoticeMapper.selectLibNoticeList(libNotice);
     }
 

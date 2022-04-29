@@ -1,7 +1,9 @@
 package com.ruoyi.quartz.task;
 
 import com.ruoyi.library.domain.LibBorrow;
+import com.ruoyi.library.domain.LibNotice;
 import com.ruoyi.library.service.ILibBorrowService;
+import com.ruoyi.library.service.ILibNoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.utils.StringUtils;
@@ -17,6 +19,9 @@ public class RyTask
 {
     @Autowired
     private ILibBorrowService libBorrowService;
+
+    @Autowired
+    private ILibNoticeService libNoticeService;
 
     public void ryMultipleParams(String s, Boolean b, Long l, Double d, Integer i)
     {
@@ -34,9 +39,19 @@ public class RyTask
     }
 
     public void selectLibBorrowAll(){
-    	System.out.println("执行查询所有借阅记录");
+        System.out.println("===================");
+    	System.out.println("更新所有借阅记录");
+        System.out.println("===================");
         LibBorrow libBorrow= new LibBorrow();
     	libBorrowService.selectLibBorrowAll(libBorrow);
+    }
+
+    public void selectLibNoticeAll(){
+        System.out.println("===================");
+        System.out.println("更新所有通知");
+        System.out.println("===================");
+        LibNotice libNotice= new LibNotice();
+        libNoticeService.selectLibNoticeAll(libNotice);
     }
 
 

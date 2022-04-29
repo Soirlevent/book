@@ -41,7 +41,7 @@ public class LibNoticeController extends BaseController
             @ApiImplicitParam(name = "pageNum",value = "当前页码" ,dataType = "int", paramType = "query", required = false),
             @ApiImplicitParam(name = "pageSize",value = "每页数据量" ,dataType = "int", paramType = "query", required = false),
     })
-    public TableDataInfo list(LibNotice libNotice) throws ParseException {
+    public TableDataInfo list(LibNotice libNotice) {
         startPage();
         List<LibNotice> list = libNoticeService.selectLibNoticeList(libNotice);
         return getDataTable(list);
@@ -54,7 +54,7 @@ public class LibNoticeController extends BaseController
     @Log(title = "消息管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ApiOperation("导出消息管理列表")
-    public void export(HttpServletResponse response, LibNotice libNotice) throws ParseException {
+    public void export(HttpServletResponse response, LibNotice libNotice) {
         List<LibNotice> list = libNoticeService.selectLibNoticeList(libNotice);
         ExcelUtil<LibNotice> util = new ExcelUtil<LibNotice>(LibNotice.class);
         util.exportExcel(response, list, "消息管理数据");

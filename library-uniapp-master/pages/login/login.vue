@@ -1,27 +1,5 @@
 <template>
   <view>
-	  <!-- <view class="content">
-	          <view class="avatorWrapper">
-	              <view class="avator">
-	                  <image class="img" src="../../static/login.png" mode="widthFix"></image>
-	              </view>
-	          </view>
-	          <view class="form">
-	              <view class="inputWrapper">
-	                  <input class="input" type="text" v-model="loginForm.username" value="" placeholder="请输入用户名"/>
-	              </view>
-	              <view class="inputWrapper">
-	                  <input class="input" type="password" v-model="loginForm.password" value="" placeholder="请输入密码"/>
-	              </view>
-				  <!-- <view class="inputWrapper">
-					  <input v-model="loginForm.code" type="number" placeholder="请输入验证码" />
-					  <image class="codeImg" :src="codeUrl" @click="getCode"></image>
-				  </view> -->
-	            <!--  <view class="loginBtn">
-	                  <text class="btnValue" @click="submit">登录</text>
-	              </view>
-	          </view>
-	      </view> --> 
    <view class="ui-all">
       <view class="ui-list">
         <text>账号</text>
@@ -30,7 +8,7 @@
       <view class="ui-list">
         <text>密码</text>
         <input v-model="loginForm.password" type="text" :password="isHidePassword ? true : false" placeholder="请输入密码" maxlength="20" />
-        <image @click="isHidePasswordClick" class="eye" :src="isHidePassword ? '/static/img/attention.png' : '/static/img/attention_forbid.png'"></image>
+        <image @click="isHidePasswordClick" class="eye"></image>
       </view>
       <view class="ui-list" v-if="captchaOnOff">
         <text>验证码</text>

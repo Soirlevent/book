@@ -21,14 +21,16 @@ public interface ILibNoticeService
      */
     public LibNotice selectLibNoticeByNoticeId(Long noticeId);
 
+
     /**
      * 查询消息管理列表
      *
      * @param libNotice 消息管理
      * @return 消息管理集合
      */
-    public List<LibNotice> selectLibNoticeList(LibNotice libNotice) throws ParseException;
+    public List<LibNotice> selectLibNoticeList(LibNotice libNotice);
 
+    public List<LibNotice> selectLibNoticeAll(LibNotice libNotice);
     /**
      * 新增消息管理
      *
@@ -60,4 +62,5 @@ public interface ILibNoticeService
      * @return 结果
      */
     public int deleteLibNoticeByNoticeId(Long noticeId);
+
 }
