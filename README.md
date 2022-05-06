@@ -1,1 +1,2 @@
-图书管理系统
+基于java-springboot-mybatis-mybatisplus-vue图书管理系统
+结合了支付宝沙箱支付，邮件发送，逾期订单和遗失订单自动生成
